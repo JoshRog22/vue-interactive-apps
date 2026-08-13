@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<!--
+Name: Joshua Rogers
+Class: CSCI-3300-W08
+Assignment: 07 Basic Vue Applications
+Program Date: April 29, 2026
+File: index.html (home page) 
+-->
+
+<!--PLEASE NOTE!! The instructions asked to use an <h1> tag for both question 1 and 2.
+    To prevent a validator warning, these tags have all been changed to <h2>.
+    The assignment also had some ambiguity regarding questions being in separate folders. 
+    I have placed everything in a single index folder, similar to our previous assignments, 
+    as that has been the acceptable standard thus far.
+    Thank you.
+    -Joshua Rogers-->
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joshua Rogers Assignment 7</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!--loads Vue 3 library from CDN-->
+    <script src="https://unpkg.com/vue@3"></script>
+</head>
+
+<body>
+
+    <main>
+
+        <!--header for web page-->
+        <header>
+            <h1>Joshua Rogers Assignment 7</h1>
+            <h2>Basic Vue Applications</h2>
+        </header>
+
+        <!--line break-->
+        <hr>
+
+        <!--Part 1. Book Application-->
+        <h2>Joshua Rogers's Book App</h2>
+
+        <!--Vue app container-->
+        <div id="bookApp"></div>
+
+        <!--Vue script for book app-->
+        <script>
+            Vue.createApp({
+
+                //HTML template controlled by Vue
+                template: `
+                    <div>
+                        <!--displays output values using Vue double mustache syntax-->
+                        <p><strong>Title:</strong> {{ title }}</p>
+                        <p><strong>Author:</strong> {{ author }}</p>
+                        <p><strong>Subject:</strong> {{ subject }}</p>
+
+                        <!--user input field for book title-->
+                        <label>Book Title:</label>
+                        <input type="text" v-model="inputTitle">
+
+                        <!--user input field for author-->
+                        <label>Author:</label>
+                        <input type="text" v-model="inputAuthor">
+
+                        <!--user input field for subject-->
+                        <label>Subject:</label>
+                        <input type="text" v-model="inputSubject">
+
+                        <br><br>
+
+                        <!--button calls Vue method when clicked-->
+                        <button type="button" @click="updateBook">Submit</button>
+                    </div>
+                `,
+
+                //stores application data
+                data() {
+                    return {
+                        title: "",          //displayed title
+                        author: "",         //displayed author
+                        subject: "",        //displayed subject
+                        inputTitle: "",     //user input title
+                        inputAuthor: "",    //user input author
+                        inputSubject: ""    //user input subject
+                    }
+                },
+
+                //methods contain functions for interaction
+                methods: {
+                    updateBook() {
+
+                        //copies user input into display variables
+                        this.title = this.inputTitle;
+                        this.author = this.inputAuthor;
+                        this.subject = this.inputSubject;
+                    }
+                }
+
+            }).mount('#bookApp'); //attaches Vue to div
+        </script>
+
+        <!--line break between part 1 and part 2-->
+        <hr>
+
+        <!--Part 2. Distance Conversion Application-->
+        <h2>Joshua Rogers's Distance Conversion Application</h2>
+
+        <!--Vue app container-->
+        <div id="distanceApp"></div>
+
+        <!--Vue script for distance app-->
+        <script>
+            Vue.createApp({
+
+                //HTML template controlled by Vue
+                template: `
+                    <div>
+                        <!--displays conversion result-->
+                        <h2 class="distance-result">{{ result }}</h2>
+
+                        <!--input field for distance-->
+                        <label>Enter Distance:</label>
+                        <input type="text" v-model="distance">
+
+                        <!--dropdown for starting unit-->
+                        <label>From:</label>
+                        <select v-model="fromUnit">
+                            <option>centimeters</option>
+                            <option>meters</option>
+                            <option>kilometers</option>
+                            <option>inches</option>
+                            <option>feet</option>
+                            <option>miles</option>
+                        </select>
+
+                        <!--dropdown for conversion unit-->
+                        <label>To:</label>
+                        <select v-model="toUnit">
+                            <option>centimeters</option>
+                            <option>meters</option>
+                            <option>kilometers</option>
+                            <option>inches</option>
+                            <option>feet</option>
+                            <option>miles</option>
+                        </select>
+                    </div>
+                `,
+
+                //stores input and selected units
+                data() {
+                    return {
+                        distance: "",        //user inputs distance
+                        fromUnit: "meters",  //default starting unit
+                        toUnit: "kilometers" //default ending unit
+                    }
+                },
+
+                //computed automatically updates when data changes
+                computed: {
+                    result() {
+
+                        //checks for empty input
+                        if (this.distance === "") {
+                            return "Result will show here.";
+                        }
+
+                        //converts input into a number
+                        let value = parseFloat(this.distance);
+
+                        //validates input
+                        if (isNaN(value) || value < 0) {
+                            return "Invalid input";
+                        }
+
+                        //converts input value to meters
+                        let meters;
+
+                        switch (this.fromUnit) {
+                            case "centimeters": meters = value / 100; break;
+                            case "meters": meters = value; break;
+                            case "kilometers": meters = value * 1000; break;
+                            case "inches": meters = value * 0.0254; break;
+                            case "feet": meters = value * 0.3048; break;
+                            case "miles": meters = value * 1609.34; break;
+                        }
+
+                        //converts meters to selected output unit
+                        let output;
+
+                        switch (this.toUnit) {
+                            case "centimeters": output = meters * 100; break;
+                            case "meters": output = meters; break;
+                            case "kilometers": output = meters / 1000; break;
+                            case "inches": output = meters / 0.0254; break;
+                            case "feet": output = meters / 0.3048; break;
+                            case "miles": output = meters / 1609.34; break;
+                        }
+
+                        //returns formatted result with 3 decimal places
+                        return output.toFixed(3) + " " + this.toUnit;
+                    }
+                }
+
+            }).mount('#distanceApp'); //attaches Vue to div
+        </script>
+
+    </main>
+
+    <!--footer and copyright at bottom of page-->
+    <footer>
+        <p>&copy; 2026 Joshua Rogers</p>
+    </footer>
+
+</body>
+
+</html>
